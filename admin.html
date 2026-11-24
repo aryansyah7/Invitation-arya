@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Blast Undangan</title>
+<style>
+:root{--bg1:#12002b;--pink:#ff2e97;--cyan:#00e5ff;--yel:#ffd60a;--org:#ff7a18;--txt:#f5ecff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Trebuchet MS',Arial,sans-serif;background:linear-gradient(160deg,#3b0a8f,var(--bg1) 55%,#6a0a5e);color:var(--txt);min-height:100vh;padding:18px}
+.wrap{max-width:900px;margin:0 auto}
+.head{text-align:center;padding:26px 16px;border-radius:22px;background:rgba(255,255,255,.07);border:2px solid var(--pink);box-shadow:0 0 26px rgba(255,46,151,.5);margin-bottom:18px}
+.head h1{font-size:1.6rem;font-weight:900;text-transform:uppercase;background:linear-gradient(90deg,var(--yel),var(--org),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.head p{margin-top:8px;font-size:.9rem;opacity:.85}
+.box{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.15);border-left:6px solid var(--cyan);border-radius:18px;padding:18px;margin-bottom:18px}
+label{display:block;font-size:.8rem;font-weight:800;color:var(--cyan);letter-spacing:1px;margin:0 0 8px}
+label:not(:first-child){margin-top:18px}
+input[type=text]{width:100%;padding:13px;border-radius:12px;border:2px solid var(--pink);background:rgba(0,0,0,.35);color:#fff;font-size:.95rem}
+input[type=text]:focus{outline:none;border-color:var(--cyan)}
+input[type=file]{width:100%;padding:12px;border-radius:12px;border:2px dashed var(--cyan);background:rgba(0,0,0,.25);color:#fff;font-size:.9rem}
+.btn{border:0;cursor:pointer;font-weight:800;padding:11px 18px;border-radius:30px;font-size:.85rem;color:#1a0033;background:linear-gradient(90deg,var(--yel),var(--org));text-decoration:none;display:inline-block}
+.btn.wa{background:linear-gradient(90deg,#25d366,#00e5a0);color:#00220f}
+.btn.out{background:transparent;color:var(--cyan);border:2px solid var(--cyan)}
+.btn.sm{padding:8px 14px;font-size:.78rem}
+.btn:disabled{opacity:.5}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+h2{font-size:1.15rem;margin-bottom:12px;color:var(--yel);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.scroll{overflow-x:auto;border-radius:14px;border:1px solid rgba(255,255,255,.2)}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{background:linear-gradient(90deg,#8a2be2,var(--pink));padding:12px 10px;text-align:left;font-size:.8rem;letter-spacing:1px}
+td{padding:11px 10px;border-top:1px solid rgba(255,255,255,.12);font-size:.88rem;vertical-align:middle}
+tr.done td{opacity:.55}
+td.empty{text-align:center;padding:26px;opacity:.7}
+.tag{display:inline-block;padding:3px 10px;border-radius:20px;background:var(--cyan);color:#001;font-size:.72rem;font-weight:800}
+.ok{color:#5dffa0;font-weight:800;font-size:.78rem;margin-left:6px}
+#msg{margin-top:12px;font-size:.85rem;color:var(--yel)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <h1>Panel Blast Undangan (CSV)</h1>
+    <p>Upload file data-tamu.csv untuk membuat tautan personal dan kirim via WhatsApp</p>
+  </div>
+
+  <div class="box">
+    <label>1. URL DASAR WEB UNDANGAN (ganti dengan link hosting jika sudah online)</label>
+    <input type="text" id="baseUrl" value="https://username.github.io/nama-repo/index.html">
+
+    <label>2. PILIH FILE CSV (data-tamu.csv)</label>
+    <input type="file" id="csvFile" accept=".csv,text/csv,text/plain">
+
+    <div class="bar">
+      <button class="btn out sm" id="tplBtn">⬇ Unduh Contoh CSV</button>
+    </div>
+    <div id="msg"></div>
+  </div>
+
+  <div class="box" style="border-left-color:var(--pink)">
+    <h2>Daftar Penerima Undangan <span id="count"></span></h2>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>No</th><th>Nama Tamu</th><th>Instansi</th><th>Kategori</th><th>No. WhatsApp</th><th>Aksi Blast</th></tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td class="empty" colspan="6">Silakan unggah file data-tamu.csv terlebih dahulu.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let guests = [];
+
+// ---------- Parser CSV (dukung koma / titik koma, tanda kutip, BOM) ----------
+function parseCSV(text) {
+  text = text.replace(/^\uFEFF/, "");
+  const first = text.split(/\r?\n/)[0] || "";
+  const delim = (first.match(/;/g) || []).length > (first.match(/,/g) || []).length ? ";" : ",";
+  const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') q = false;
+      else cell += c;
+    } else if (c === '"') q = true;
+    else if (c === delim) { row.push(cell); cell = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(cell); rows.push(row); row = []; cell = "";
+    } else cell += c;
+  }
+  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(x => x.trim() !== ""));
+}
+
+// ---------- Rapikan nomor WA ke format 62xxx ----------
+function fixPhone(n) {
+  n = String(n || "").replace(/\D/g, "");
+  if (n.startsWith("0")) n = "62" + n.slice(1);
+  else if (n.startsWith("8")) n = "62" + n;
+  return n;
+}
+
+// ---------- Buat link personal ----------
+function makeLink(g) {
+  let base = $("baseUrl").value.trim();
+  const sep = base.includes("?") ? "&" : "?";
+  return base + sep +
+    "to=" + encodeURIComponent(g.nama) +
+    "&instansi=" + encodeURIComponent(g.instansi) +
+    "&kategori=" + encodeURIComponent(g.kategori);
+}
+
+// ---------- Tampilkan tabel ----------
+function render() {
+  const tb = $("tbody");
+  tb.innerHTML = "";
+  if (!guests.length) {
+    tb.innerHTML = '<tr><td class="empty" colspan="6">Silakan unggah file data-tamu.csv terlebih dahulu.</td></tr>';
+    $("count").textContent = "";
+    return;
+  }
+  $("count").textContent = guests.length + " tamu";
+  guests.forEach((g, i) => {
+    const tr = document.createElement("tr");
+    if (g.sent) tr.className = "done";
+
+    const cells = [i + 1, g.nama, g.instansi];
+    cells.forEach(v => { const td = document.createElement("td"); td.textContent = v; tr.appendChild(td); });
+
+    const tdK = document.createElement("td");
+    const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = g.kategori || "-";
+    tdK.appendChild(tag); tr.appendChild(tdK);
+
+    const tdW = document.createElement("td"); tdW.textContent = g.wa || "-"; tr.appendChild(tdW);
+
+    const tdA = document.createElement("td");
+    const b = document.createElement("button");
+    b.className = "btn wa sm"; b.textContent = "💬 Blast";
+    b.onclick = () => blast(i);
+    const c = document.createElement("button");
+    c.className = "btn out sm"; c.style.marginLeft = "6px"; c.textContent = "Salin Link";
+    c.onclick = () => copyLink(i);
+    tdA.appendChild(b); tdA.appendChild(c);
+    if (g.sent) { const o = document.createElement("span"); o.className = "ok"; o.textContent = "✔ Terkirim"; tdA.appendChild(o); }
+    tr.appendChild(tdA);
+
+    tb.appendChild(tr);
+  });
+}
+
+// ---------- Kirim WhatsApp ----------
+function blast(i) {
+  const g = guests[i];
+  if (!g.wa) { alert("Nomor WhatsApp kosong untuk " + g.nama); return; }
+  const link = makeLink(g);
+  const pesan =
+    "Yth. " + g.nama + (g.instansi ? " (" + g.instansi + ")" : "") + ",\n\n" +
+    "Dengan hormat, kami mengundang Anda untuk hadir di *Edu Fair & Career Day 2026*.\n\n" +
+    "Buka undangan digital Anda di sini:\n" + link + "\n\n" +
+    "Terima kasih. Sampai jumpa di acara!";
+  window.open("https://wa.me/" + g.wa + "?text=" + encodeURIComponent(pesan), "_blank");
+  g.sent = true;
+  render();
+}
+
+function copyLink(i) {
+  const link = makeLink(guests[i]);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(() => alert("Link disalin:\n" + link), () => prompt("Salin link ini:", link));
+  } else prompt("Salin link ini:", link);
+}
+
+// ---------- Baca file CSV ----------
+$("csvFile").addEventListener("change", e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const rows = parseCSV(reader.result);
+    if (rows.length < 2) { $("msg").textContent = "⚠ File kosong atau hanya berisi header."; return; }
+
+    const head = rows[0].map(h => h.trim().toLowerCase());
+    const find = (...keys) => head.findIndex(h => keys.some(k => h.includes(k)));
+    const iN = find("nama"), iI = find("instansi", "sekolah", "perusahaan"),
+          iK = find("kategori", "status"), iW = find("whatsapp", "wa", "telp", "hp", "phone");
+
+    if (iN < 0) { $("msg").textContent = "⚠ Kolom 'nama' tidak ditemukan di baris pertama."; return; }
+
+    guests = rows.slice(1).map(r => ({
+      nama: (r[iN] || "").trim(),
+      instansi: iI >= 0 ? (r[iI] || "").trim() : "",
+      kategori: iK >= 0 ? (r[iK] || "").trim() : "",
+      wa: iW >= 0 ? fixPhone(r[iW]) : "",
+      sent: false
+    })).filter(g => g.nama);
+
+    $("msg").textContent = "✔ Berhasil membaca " + guests.length + " tamu.";
+    render();
+  };
+  reader.readAsText(f);
+});
+
+// ---------- Unduh contoh CSV ----------
+$("tplBtn").onclick = () => {
+  const csv = "nama,instansi,kategori,whatsapp\n" +
+    "Dinda Nurrahma S.Pd.,SMKN 6 Tangsel,Guru,081234567890\n" +
+    "Budi Santoso,PT Maju Jaya,Mitra Industri,081298765432\n";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = "data-tamu.csv";
+  a.click();
+};
+
+// Link ikut berubah kalau URL dasar diganti
+$("baseUrl").addEventListener("input", () => { if (guests.length) render(); });
+</script>
+</body>
+</html>

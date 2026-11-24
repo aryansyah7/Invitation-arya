@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Edu Fair & Career Day 2026</title>
+<style>
+:root{--bg1:#12002b;--bg2:#2a0a5e;--pink:#ff2e97;--cyan:#00e5ff;--yel:#ffd60a;--org:#ff7a18;--txt:#f5ecff}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Trebuchet MS',Arial,sans-serif;background:var(--bg1);color:var(--txt);padding-bottom:82px;overflow-x:hidden}
+body.lock{overflow:hidden;height:100vh}
+.grad{background:linear-gradient(90deg,var(--yel),var(--org),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+section{padding:70px 22px;max-width:760px;margin:0 auto}
+.title{text-align:center;margin-bottom:34px}
+.title small{display:inline-block;background:var(--pink);color:#fff;padding:5px 16px;border-radius:30px;font-size:.7rem;font-weight:800;letter-spacing:3px;box-shadow:0 0 18px var(--pink)}
+.title h2{font-size:1.9rem;margin-top:14px;font-weight:900;text-transform:uppercase}
+
+.blob{position:fixed;border-radius:50%;filter:blur(80px);opacity:.45;z-index:-1;animation:float 9s ease-in-out infinite alternate}
+.b1{width:300px;height:300px;background:var(--pink);top:-80px;left:-80px}
+.b2{width:280px;height:280px;background:var(--cyan);bottom:-80px;right:-80px;animation-delay:2s}
+.b3{width:220px;height:220px;background:var(--org);top:45%;left:55%;animation-delay:4s}
+@keyframes float{to{transform:translate(40px,50px) scale(1.2)}}
+
+/* COVER */
+#cover{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px;
+background:linear-gradient(160deg,#3b0a8f,var(--bg1) 60%,#6a0a5e);transition:transform .9s cubic-bezier(.7,0,.2,1)}
+#cover.open{transform:scale(1.4);opacity:0;pointer-events:none}
+#cover .tag{background:var(--cyan);color:#001;font-weight:900;padding:6px 18px;border-radius:30px;letter-spacing:3px;font-size:.72rem;box-shadow:0 0 20px var(--cyan)}
+#cover h1{font-size:2.5rem;font-weight:900;line-height:1.1;margin:18px 0 8px;text-transform:uppercase}
+#cover .sub{opacity:.85;margin-bottom:30px;font-style:italic}
+.guest{width:100%;max-width:340px;padding:22px;border-radius:22px;background:rgba(255,255,255,.08);border:2px solid var(--pink);box-shadow:0 0 28px rgba(255,46,151,.55)}
+.guest p{font-size:.85rem;opacity:.8}
+.guest h3{font-size:1.4rem;margin:8px 0 4px;color:var(--yel)}
+.badge{display:inline-block;margin-top:12px;padding:6px 18px;border-radius:30px;background:linear-gradient(90deg,var(--org),var(--pink));font-weight:800;font-size:.75rem;letter-spacing:2px;text-transform:uppercase}
+.btn{display:inline-block;border:0;cursor:pointer;text-decoration:none;font-weight:900;padding:15px 32px;border-radius:40px;font-size:.95rem;color:#1a0033;
+background:linear-gradient(90deg,var(--yel),var(--org));box-shadow:0 0 24px rgba(255,122,24,.6);animation:pulse 1.8s infinite}
+.btn.out{background:transparent;color:var(--cyan);border:2px solid var(--cyan);box-shadow:0 0 16px rgba(0,229,255,.5);animation:none}
+@keyframes pulse{50%{transform:scale(1.05)}}
+#cover .btn{margin-top:28px}
+
+/* HERO */
+#home{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;max-width:none}
+#home .org{background:rgba(255,255,255,.1);border:1px solid var(--cyan);color:var(--cyan);padding:6px 18px;border-radius:30px;font-size:.75rem;font-weight:800;letter-spacing:2px}
+#home h1{font-size:2.9rem;font-weight:900;line-height:1.05;margin:20px 0;text-transform:uppercase}
+#home p.d{max-width:440px;line-height:1.7;opacity:.9;margin-bottom:32px}
+.cd{display:flex;gap:10px;justify-content:center}
+.cd div{width:72px;padding:14px 0;border-radius:16px;background:linear-gradient(160deg,var(--pink),#8a2be2);box-shadow:0 0 20px rgba(255,46,151,.6)}
+.cd div:nth-child(even){background:linear-gradient(160deg,var(--cyan),#2979ff);box-shadow:0 0 20px rgba(0,229,255,.6)}
+.cd b{display:block;font-size:1.8rem;font-weight:900}
+.cd span{font-size:.62rem;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+
+/* CARDS */
+.card{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.15);border-left:6px solid var(--pink);border-radius:18px;padding:20px;margin-bottom:16px;backdrop-filter:blur(6px)}
+.card:nth-of-type(even){border-left-color:var(--cyan)}
+.card h3{color:var(--yel);margin-bottom:6px;font-size:1.1rem}
+.card p{line-height:1.6;font-size:.95rem;opacity:.92}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+
+/* MAP */
+.map-box{border-radius:18px;overflow:hidden;border:2px solid var(--pink);box-shadow:0 0 20px rgba(255,46,151,.5);margin-top:6px}
+.map-box iframe{width:100%;height:300px;border:0;display:block}
+.map-box a{display:block;text-align:center;padding:14px;font-weight:800;color:var(--cyan);text-decoration:none;background:rgba(0,0,0,.4)}
+
+/* TIMELINE */
+.tl{border-left:3px dashed var(--cyan);margin-left:8px;padding-left:24px}
+.tl .it{position:relative;margin-bottom:26px}
+.tl .it::before{content:"";position:absolute;left:-34px;top:2px;width:18px;height:18px;border-radius:50%;background:var(--pink);box-shadow:0 0 14px var(--pink)}
+.tl time{display:inline-block;background:var(--yel);color:#1a0033;font-weight:900;font-size:.75rem;padding:3px 12px;border-radius:20px}
+.tl h3{margin:8px 0 3px;font-size:1.05rem}
+.tl p{font-size:.9rem;opacity:.85;line-height:1.5}
+
+/* FORM */
+label{display:block;font-size:.8rem;font-weight:800;margin:14px 0 6px;color:var(--cyan);letter-spacing:1px}
+input,select{width:100%;padding:14px;border-radius:14px;border:2px solid var(--pink);background:rgba(0,0,0,.35);color:#fff;font-size:1rem}
+input:focus,select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 14px var(--cyan)}
+select option{color:#000}
+form .btn{width:100%;margin-top:22px}
+
+/* NAV */
+nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:4px;padding:8px;border-radius:40px;
+background:rgba(18,0,43,.9);border:2px solid var(--pink);box-shadow:0 0 20px rgba(255,46,151,.6);backdrop-filter:blur(8px)}
+nav a{color:#fff;text-decoration:none;font-size:.78rem;font-weight:800;padding:10px 20px;border-radius:30px}
+nav a:active,nav a:hover{background:linear-gradient(90deg,var(--org),var(--pink))}
+footer{text-align:center;padding:30px 20px;font-size:.8rem;opacity:.65}
+.rv{opacity:0;transform:translateY(30px) scale(.97);transition:.7s}
+.rv.show{opacity:1;transform:none}
+</style>
+</head>
+<body class="lock">
+
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+
+<!-- COVER -->
+<div id="cover">
+  <div class="tag">★ UNDANGAN RESMI ★</div>
+  <h1><span class="grad">Edu Fair</span><br>& Career Day<br>2026</h1>
+  <div class="sub">"Wujudkan Karier Impianmu"</div>
+  <div class="guest">
+    <p>Kepada Yth. Bapak/Ibu/Saudara/i</p>
+    <h3 id="gNama">Tamu Kehormatan</h3>
+    <div id="gInstansi">smkn 6 tangsel</div>
+    <span class="badge" id="gKategori">Tamu VIP</span>
+  </div>
+  <button class="btn" id="openBtn">🚀 Buka Undangan</button>
+</div>
+
+<!-- HOME -->
+<section id="home">
+  <div class="org">SMKN 6 Tangsel</div>
+  <h1><span class="grad">Edu Fair</span><br>& Career<br>Day 2026</h1>
+  <p class="d">Mempertemukan generasi muda berbakat dengan perguruan tinggi dan dunia industri terbaik.</p>
+  <div class="cd">
+    <div><b id="d">00</b><span>Hari</span></div>
+    <div><b id="h">00</b><span>Jam</span></div>
+    <div><b id="m">00</b><span>Menit</span></div>
+    <div><b id="s">00</b><span>Detik</span></div>
+  </div>
+</section>
+
+<!-- ACARA -->
+<section id="acara">
+  <div class="title rv"><small>WAKTU & TEMPAT</small><h2 class="grad">Detail Acara</h2></div>
+  <div class="card rv"><h3>Hari & Tanggal</h3><p>Rabu, 25 November 2026</p></div>
+  <div class="card rv"><h3>⏰ Waktu</h3><p>08.00 – 15.30 WIB</p></div>
+  <div class="card rv"><h3>📍 Lokasi</h3><p>Smkn 6 Tangsel</p></div>
+
+  <div class="map-box rv">
+    <iframe
+      src="https://www.google.com/maps?q=SMKN+6+Tangerang+Selatan&output=embed"
+      loading="lazy"
+      allowfullscreen
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <a target="_blank" href="https://www.google.com/maps/search/?api=1&query=SMKN+6+Tangerang+Selatan">↗ Buka di Google Maps</a>
+  </div>
+
+  <div class="row rv">
+    <a class="btn out" target="_blank" href="https://www.google.com/maps/search/?api=1&query=SMKN+6+Tangerang+Selatan">📍 Buka Maps</a>
+    <button class="btn out" id="calBtn">🗓 Simpan ke Kalender</button>
+  </div>
+
+  <div class="title rv" style="margin-top:60px"><small>SUSUNAN ACARA</small><h2 class="grad">Rundown</h2></div>
+  <div class="tl">
+    <div class="it rv"><time>08.00 – 08.30</time><h3>Registrasi & Welcome Drink</h3><p>Penyambutan tamu, perwakilan kampus, dan perusahaan.</p></div>
+    <div class="it rv"><time>08.30 – 09.30</time><h3>Pembukaan & Keynote</h3><p>Sambutan Kepala Sekolah dan pembukaan resmi.</p></div>
+    <div class="it rv"><time>09.30 – 14.30</time><h3>Pameran Booth & Talkshow</h3><p>Konsultasi pendidikan, rekrutmen magang, dan sharing alumni.</p></div>
+    <div class="it rv"><time>14.30 – 15.30</time><h3>Penutupan & Apresiasi</h3><p>Penyerahan plakat dan foto bersama.</p></div>
+  </div>
+</section>
+
+<!-- RSVP -->
+<section id="rsvp">
+  <div class="title rv"><small>KONFIRMASI</small><h2 class="grad">RSVP Kehadiran</h2></div>
+  <div class="card rv">
+    <form id="rsvpForm">
+      <label>NAMA LENGKAP</label>
+      <input id="fNama" required placeholder="Nama Anda">
+      <label>ASAL INSTANSI / PERUSAHAAN</label>
+      <input id="fIns" required placeholder="Nama instansi">
+      <label>STATUS KEHADIRAN</label>
+      <select id="fStatus">
+        <option>Hadir (Membuka Booth)</option>
+        <option>Hadir (Tamu Undangan / Pembicara)</option>
+        <option>Berhalangan Hadir</option>
+      </select>
+      <button class="btn" type="submit">💬 Kirim via WhatsApp</button>
+    </form>
+  </div>
+</section>
+
+<footer>© 2026 Panitia Edu Fair & Career Day • Tim RPL</footer>
+
+<nav>
+  <a href="#home">Home</a><a href="#acara">Acara</a><a href="#rsvp">RSVP</a>
+</nav>
+
+<script>
+// ===== GANTI NOMOR WA PANITIA (format 62, tanpa +) =====
+const NOMOR_WA = "6281234567890";
+// ===== Tanggal acara: 25 November 2026, 08.00 WIB =====
+const TARGET = new Date("2026-11-25T08:00:00+07:00");
+
+// Personalisasi dari link: ?to=...&instansi=...&kategori=...
+const q = new URLSearchParams(location.search);
+const to = q.get("to"), ins = q.get("instansi"), kat = q.get("kategori");
+if (to) { gNama.textContent = to; fNama.value = to; }
+if (ins) { gInstansi.textContent = ins; fIns.value = ins; }
+if (kat) gKategori.textContent = kat;
+
+openBtn.onclick = () => {
+  cover.classList.add("open");
+  document.body.classList.remove("lock");
+  window.scrollTo(0, 0);
+};
+
+function tick() {
+  let t = TARGET - new Date();
+  if (t < 0) t = 0;
+  const p = n => String(n).padStart(2, "0");
+  d.textContent = p(Math.floor(t / 864e5));
+  h.textContent = p(Math.floor(t / 36e5) % 24);
+  m.textContent = p(Math.floor(t / 6e4) % 60);
+  s.textContent = p(Math.floor(t / 1e3) % 60);
+}
+tick(); setInterval(tick, 1000);
+
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) e.target.classList.add("show");
+}), { threshold: .15 });
+document.querySelectorAll(".rv").forEach(el => io.observe(el));
+
+calBtn.onclick = () => {
+  const ics = [
+    "BEGIN:VCALENDAR","VERSION:2.0","BEGIN:VEVENT",
+    "SUMMARY:Edu Fair & Career Day 2026",
+    "DTSTART:20261125T010000Z","DTEND:20261125T083000Z",
+    "LOCATION:SMKN 6 Tangerang Selatan",
+    "DESCRIPTION:Undangan Edu Fair & Career Day 2026",
+    "END:VEVENT","END:VCALENDAR"
+  ].join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+  a.download = "edu-fair-2026.ics";
+  a.click();
+};
+
+rsvpForm.onsubmit = e => {
+  e.preventDefault();
+  const pesan = `Halo Panitia Edu Fair & Career Day 2026,%0A%0A` +
+    `Nama: ${encodeURIComponent(fNama.value)}%0A` +
+    `Instansi: ${encodeURIComponent(fIns.value)}%0A` +
+    `Status: ${encodeURIComponent(fStatus.value)}%0A%0A` +
+    `Terima kasih.`;
+  window.open(`https://wa.me/${NOMOR_WA}?text=${pesan}`, "_blank");
+};
+</script>
+</body>
+</html>
